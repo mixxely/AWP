@@ -4,10 +4,10 @@ function register_service_worker() {
   if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("./sw.js", { scope: "./" })
     .then(res => {
-      console.log("SW successfully registered.");
+      console.log("SW Registrado exitosamente.");
     })
     .catch(err => {
-      console.log("Could not register service worker.", err);
+      console.log("No se pudo registrar el service worker.", err);
     });
 }
 }
@@ -17,17 +17,18 @@ function unregister_service_worker() {
     .then(registrations => {
       registrations.forEach(registration => {
         registration.unregister();
-        console.log("Service Worker unregistered.");
+        console.log("Service Worker no registrado.");
       });
     })
     .catch(err => {
-      console.log("Could not unregister service worker.");
+      console.log("No se pudo cancelar el registro del service worker.");
     });
 }
 
 window.addEventListener('click', () => {
   fetch('./obj.png')
-    .then(res => console.log('From script.js:', res));
+    .then(res => console.log('Del script.js:', res));
 });
 
 register_service_worker();
+
