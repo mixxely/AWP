@@ -4,45 +4,46 @@ self.addEventListener('install', event => {
   event.waitUntil(
     caches.open('v1')
       .then(cache => {
-        cache.addAll([
+        console.log("Almacenando recursos en cache...");
+        return cache.addAll([
           './',          // index.html
           './script.js', // main script
           './obj.png'    // local image
         ]);
-        console.log("Assets cached.");
       })
-      .catch(err => console.log("Could not cache."))
+      .then(() => console.log("Recursos de cache almacenados."))
+      .catch(err => console.log("No se pudo almacenar el cache.", err))
   );
 });
 
 self.addEventListener('fetch', event => {
-  console.log("INTERCEPTED");
-
+  console.log("INTERCEPTADO");
   event.respondWith(
     caches.match(event.request)
       .then(response => {
-        console.log("V1 The request:", event.request);
-        console.log("V1 Got the response...", response);
-
-        // Example 1: from cache or fetched if not
+        console.log("V1 Petición detectada:", event.request);
+        console.log("V1 Respuesta obtenida...", response);
         return response || fetch(event.request);
-
-        // Example 2, 3, 4, 5 están en comentarios en el artículo
       })
       .catch(err => {
-        console.log("Could not find matching request.");
+        console.log("No se encontró ninguna solicitud  que coincida.", err);
         return null;
       })
   );
 });
 
 self.addEventListener('activate', event => {
+  const cacheWhitelist = ['v1'];
   event.waitUntil(
     caches.keys()
-      .then(keys => {
-        keys.forEach(key => {
-          if (key === 'v1') caches.delete(key);
-        });
-      })
+      .then(keys => Promise.all(
+        keys.map(key => {
+          if (!cacheWhitelist.includes(key)) {
+            console.log("Borrando cache viejo:", key);
+            return caches.delete(key);
+          }
+        })
+      ))
   );
 });
+
