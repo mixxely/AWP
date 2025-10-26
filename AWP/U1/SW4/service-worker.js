@@ -9,7 +9,7 @@ const cacheAssets = [
   './main.js',
   './img/logo.png',
   './img/logo2.png',
-  './img/partyfavors.jpg',
+  './img/PartyFavors.jpg',  // ojo con la P mayúscula
   './img/IamTheDog.jpg',
   './img/STN.webp',
   './img/SirChloe_.jpg',
@@ -71,4 +71,5 @@ self.addEventListener('message', event => {
     self.registration.showNotification(title, options);
   }
 });
+
 
